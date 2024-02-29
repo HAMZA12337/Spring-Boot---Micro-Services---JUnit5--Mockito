@@ -23,11 +23,6 @@ public class Customer {
     @NotEmpty @Size(min = 5)
     @Column(unique=true)
     private String email;
-
-
-
-
-
 }
 
 

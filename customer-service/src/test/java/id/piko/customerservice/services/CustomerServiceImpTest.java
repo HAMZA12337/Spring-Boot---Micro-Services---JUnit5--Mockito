@@ -2,6 +2,7 @@ package id.piko.customerservice.services;
 
 import id.piko.customerservice.dtos.CustomerDTO;
 import id.piko.customerservice.entities.Customer;
+import id.piko.customerservice.exceptions.CustomerNotFoundException;
 import id.piko.customerservice.mappers.CustomerMapper;
 import id.piko.customerservice.repositories.CustomerRepository;
 import org.assertj.core.api.AssertionsForClassTypes;
@@ -90,6 +91,77 @@ class CustomerServiceImpTest {
     AssertionsForClassTypes.assertThat(expected).usingRecursiveComparison().isEqualTo(result);
 
 }
+
+
+@Test
+
+    public void testFindCustomerById() throws CustomerNotFoundException {
+
+
+        Customer customer=Customer.builder().
+                id(1L).firstName("Mohamed").lastName("Youssfi").email("med@gmail.com").build();
+
+
+
+    CustomerDTO customerDTO=CustomerDTO.builder().
+            id(1L).firstName("Mohamed").lastName("Youssfi").email("med@gmail.com").build();
+
+
+
+    Mockito.when(customerRepository.findById(1L)).thenReturn(Optional.of(customer));
+    Mockito.when(customerMapper.fromCustomer(customer)).thenReturn(customerDTO);
+
+    CustomerDTO result=undertestCustomerServiceImp.findCustomerById(1L);
+
+    AssertionsForClassTypes.assertThat(result).usingRecursiveComparison().isEqualTo(customerDTO);
+    }
+
+
+    @Test
+
+    public void testSearchCustomers(){
+
+    String keyword="m";
+        List<Customer> customersList = List.of(
+
+                Customer.builder()
+                        .firstName("HAMZA").lastName("BRAIMI").email("hamza@gmail.com").build(),
+
+                Customer.builder()
+                        .firstName("Ahmed").lastName("Yassine").email("ahmed@gmail.com").build(),
+
+                Customer.builder()
+                        .firstName("Hamane").lastName("yamal").email("hanane@gmail.com").build()
+
+        );
+        List<CustomerDTO> customersListDTO = List.of(
+
+                CustomerDTO.builder()
+                        .firstName("HAMZA").lastName("BRAIMI").email("hamza@gmail.com").build(),
+
+                CustomerDTO.builder()
+                        .firstName("Ahmed").lastName("Yassine").email("ahmed@gmail.com").build(),
+
+                CustomerDTO.builder()
+                        .firstName("Hamane").lastName("yamal").email("hanane@gmail.com").build()
+
+        );
+
+     Mockito.when(customerRepository.findByFirstNameContainsIgnoreCase(keyword)).thenReturn(customersList);
+     Mockito.when(customerMapper.fromListCustomer(customersList)).thenReturn(customersListDTO);
+
+     List<CustomerDTO> result= undertestCustomerServiceImp.searchCustomers(keyword);
+
+     AssertionsForClassTypes.assertThat(result).usingRecursiveComparison().isEqualTo(customersListDTO);
+
+
+    }
+
+
+
+
+
+
 
 
 

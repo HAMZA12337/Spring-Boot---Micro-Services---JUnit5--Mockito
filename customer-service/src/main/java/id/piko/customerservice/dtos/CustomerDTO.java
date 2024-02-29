@@ -9,8 +9,6 @@ import lombok.*;
 
 @AllArgsConstructor @NoArgsConstructor @Getter @Setter @Builder @ToString
 public class CustomerDTO {
-
-
     private Long id ;
     @NotEmpty
     @Size(min = 3)
