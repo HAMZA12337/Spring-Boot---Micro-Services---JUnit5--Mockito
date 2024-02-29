@@ -46,11 +46,55 @@ class CustomerRepositoryTest {
             Optional<Customer> result=customerRepository.findByEmail(email);
 
             AssertionsForClassTypes.assertThat(result).isPresent();
+  }
+
+    @Test
+    public void testNotFindCustomerByEmail(){
+
+        String email="hamzacdcd@gmail.com";
+
+        Optional<Customer> result=customerRepository.findByEmail(email);
+
+        AssertionsForClassTypes.assertThat(result).isEmpty();
+    }
+
+
+    @Test
+
+    public void testFindCustomersByFirstName(){
+
+        String name="a";
+
+
+        List<Customer> expectedList=List.of(
+
+                Customer.builder()
+                        .firstName("HAMZA").lastName("BRAIMI").email("hamza@gmail.com").build(),
+
+                Customer.builder()
+                .firstName("Ahmed").lastName("Yassine").email("ahmed@gmail.com").build(),
+
+                Customer.builder()
+                .firstName("Hanane").lastName("yamal").email("hanane@gmail.com").build()
+
+        );
+
+        List<Customer> customerList=customerRepository.findByFirstNameContainsIgnoreCase(name);
+
+                 assertThat(customerList).isNotNull();
+
+                 assertThat(customerList.size()).isEqualTo(expectedList.size());
+
+                 // Compare By Content
+
+                assertThat(customerList).usingRecursiveComparison().ignoringFields("id").isEqualTo(expectedList);
 
 
 
 
-            }
+    }
+
+
 
 
 
